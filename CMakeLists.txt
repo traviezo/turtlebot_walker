@@ -200,3 +200,7 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
+## Build turtlebot walker
+add_executable(move_forward src/turtlebot_walker.cpp)
+target_link_libraries(move_forward ${catkin_LIBRARIES})
+add_dependencies(move_forward turtlebot_walker_generate_messages_cpp)
