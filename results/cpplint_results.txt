@@ -1,0 +1,3 @@
+turtlebot_walker.cpp:87:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+Done processing turtlebot_walker.cpp
+Total errors found: 1
