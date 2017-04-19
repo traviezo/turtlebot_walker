@@ -1,0 +1,20 @@
+<launch>
+
+	<include file="$(find turtlebot_gazebo)/launch/turtlebot_world.launch" />
+
+    	<node 
+           pkg="rosbag" 
+           type="record" 
+           name="record"
+           args="-O turtlebot_topics.bag /tf /scan /odom /cmd_vel_mux/input/teleop "
+        />
+
+	<node 
+           pkg="turtlebot_walker"
+           type="move_forward" 
+	   name="move_forward"
+           output="screen" 
+           launch-prefix="xterm -e">
+	</node>
+
+</launch>
