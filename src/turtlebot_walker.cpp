@@ -19,11 +19,10 @@
 #include <sensor_msgs/LaserScan.h>
 #include <vector>
 
-///Defining pi constant
+/// Defining pi constant
 const double PI = 3.1415926535897;
 
 class TurtleBotWalker {
-    
     /// Creating a node handle
     ros::NodeHandle n;
 
@@ -31,10 +30,9 @@ class TurtleBotWalker {
     ros::Publisher pub;
 
     /// A subscriber to to Laser scan
-    ros::Subscriber sub; 
+    ros::Subscriber sub;
 
-  public:
-    
+ public:
     /// Declaring a constructor
     TurtleBotWalker();
 
@@ -51,22 +49,19 @@ class TurtleBotWalker {
     * @date 04/17/2017
     */
     void rotateCallback(const sensor_msgs::LaserScan::ConstPtr& msg);
-    
 };
 
 int main(int argc, char **argv) {
-
-  
-  /// Initializing the ROS node 
+  /// Initializing the ROS node
   ros::init(argc, argv, "move_forward");
 
   /// Creating an instance of the TurtleBotWalker class
   TurtleBotWalker tbWalker;
-  
+
   /// Instatiating a ROS object that sets the loop frequency
   ros::Rate rate(10);
 
-  while(ros::ok()) {
+  while (ros::ok()) {
     ros::spinOnce();
     rate.sleep();
   }
@@ -75,13 +70,13 @@ int main(int argc, char **argv) {
 
 /// Implementing constructor
 TurtleBotWalker::TurtleBotWalker() {
-
-  /// Subscriber to laser scan definition 
-  sub = n.subscribe<sensor_msgs::LaserScan>("/scan",1,&TurtleBotWalker::rotateCallback,this);
+  /// Subscriber to laser scan definition
+  sub = n.subscribe<sensor_msgs::LaserScan>("/scan", \
+                                                  1, \
+                &TurtleBotWalker::rotateCallback, this);
 
   /// Publisher object to advertise moving forward messages
   pub = n.advertise<geometry_msgs::Twist>("cmd_vel_mux/input/teleop", 1);
-
 }
 
 /// Implementing an empty destructor
@@ -90,7 +85,6 @@ TurtleBotWalker::~TurtleBotWalker() {
 
 
 void TurtleBotWalker::rotateCallback(const sensor_msgs::LaserScan::ConstPtr& msg) {
-
   geometry_msgs::Twist command;
   command.linear.y = 0.0;
   command.linear.z = 0.0;
@@ -98,18 +92,15 @@ void TurtleBotWalker::rotateCallback(const sensor_msgs::LaserScan::ConstPtr& msg
   command.angular.x = 0.0;
   command.angular.y = 0.0;
 
-  if(msg->ranges[160] <= 1) {
+  if (msg->ranges[160] <= 1) {
     command.angular.z = (PI/2);
-  }
-  else if(msg->ranges[480] <= 1) {
-    command.angular.z = (-PI/2);
-  }
-  else if(msg->ranges[320] <= 0.7) {
-    command.angular.z = (PI/2);
-  }
-  else {
-    command.linear.x = 0.15;
-    command.angular.z = 0.0;
+  } else if (msg->ranges[480] <= 1) {
+      command.angular.z = (-PI/2);
+  } else if (msg->ranges[320] <= 0.7) {
+      command.angular.z = (PI/2);
+  } else {
+      command.linear.x = 0.15;
+      command.angular.z = 0.0;
   }
 
   pub.publish(command);
